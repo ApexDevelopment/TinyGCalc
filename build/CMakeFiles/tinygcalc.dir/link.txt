@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\tinygcalc.dir/objects.a
-C:\Tools\mingw-w64\bin\ar.exe qc CMakeFiles\tinygcalc.dir/objects.a @CMakeFiles\tinygcalc.dir\objects1.rsp
-C:\Tools\mingw-w64\bin\gcc.exe -O3 -DNDEBUG -Wl,--whole-archive CMakeFiles\tinygcalc.dir/objects.a -Wl,--no-whole-archive -o tinygcalc.exe -Wl,--out-implib,libtinygcalc.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\tinygcalc.dir\linkLibs.rsp
