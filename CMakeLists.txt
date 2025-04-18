@@ -27,13 +27,13 @@ set(SRC_FILES
     lib/tinyexpr/tinyexpr.c
 )
 
-# Platform-specific logic
+# Platform-specific sources and config
 if(PLATFORM STREQUAL "pico")
     if(NOT DEFINED PICO_SDK_PATH)
         message(FATAL_ERROR "PICO_SDK_PATH is not set.")
     endif()
 
-    set(PICO_BOARD pico)  # or your specific board like pico_w, etc.
+    set(PICO_BOARD pico)
     set(PICO_BOOT_STAGE2_IMPLEMENTATION "${PICO_SDK_PATH}/src/rp2_common/boot_stage2/boot2_w25q080.c")
 
     include(${PICO_SDK_PATH}/pico_sdk_init.cmake)
@@ -42,6 +42,7 @@ if(PLATFORM STREQUAL "pico")
     list(APPEND SRC_FILES
         src/platform/pico/hal_display.c
         src/platform/pico/hal_input.c
+        src/platform/pico/hal_time.c
     )
 elseif(PLATFORM STREQUAL "stm32")
     list(APPEND SRC_FILES
@@ -51,18 +52,19 @@ elseif(PLATFORM STREQUAL "mock")
     list(APPEND SRC_FILES
         src/platform/mock/hal_display.c
         src/platform/mock/hal_input.c
+        src/platform/mock/hal_time.c
     )
 
     set(SDL2_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/lib/SDL2")
-    include_directories("${SDL2_ROOT}/include")
-    link_directories("${SDL2_ROOT}/lib")
     list(APPEND EXTRA_LIBS SDL2)
 else()
     message(FATAL_ERROR "Unknown platform: ${PLATFORM}")
 endif()
 
+# Define the target
 add_executable(tinygcalc ${SRC_FILES})
 
+# Target-specific includes
 target_include_directories(tinygcalc PRIVATE
     src
     src/core
@@ -73,8 +75,10 @@ target_include_directories(tinygcalc PRIVATE
 
 # Link platform-specific libraries
 if(PLATFORM STREQUAL "pico")
-    target_link_libraries(tinygcalc pico_stdlib)
+    target_link_libraries(tinygcalc pico_stdlib pico_time)
     pico_add_extra_outputs(tinygcalc)
 elseif(DEFINED EXTRA_LIBS)
+    target_include_directories(tinygcalc PRIVATE "${SDL2_ROOT}/include")
+    target_link_directories(tinygcalc PRIVATE "${SDL2_ROOT}/lib")
     target_link_libraries(tinygcalc ${EXTRA_LIBS})
 endif()

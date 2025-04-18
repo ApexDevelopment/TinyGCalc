@@ -51,7 +51,7 @@ if [[ "$PLATFORM" == "mock" ]]; then
 fi
 
 # === Configure with CMake ===
-cmake .. $TOOLCHAIN_OPTION -DPICO_SDK_PATH="$PICO_SDK_PATH" -DPLATFORM="$PLATFORM"
+cmake .. $TOOLCHAIN_OPTION -DPICO_SDK_PATH="$PICO_SDK_PATH" -DPLATFORM="$PLATFORM" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
 # === Build with Make ===
 make -j"$(nproc)"

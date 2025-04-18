@@ -48,7 +48,7 @@ if /i "%PLATFORM%"=="mock" (
 )
 
 :: === Run CMake and Make ===
-cmake .. %TOOLCHAIN_OPTION% -DPICO_SDK_PATH=%PICO_SDK_PATH% -DPLATFORM=%PLATFORM% -G "MinGW Makefiles"
+cmake .. %TOOLCHAIN_OPTION% -DPICO_SDK_PATH=%PICO_SDK_PATH% -DPLATFORM=%PLATFORM% -G "MinGW Makefiles" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 if errorlevel 1 exit /b 1
 
 mingw32-make
