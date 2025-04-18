@@ -15,6 +15,7 @@ typedef enum {
     INPUT_UP,
     INPUT_DOWN,
     INPUT_SELECT,
+    INPUT_ENTER,
     INPUT_BACK
 } input_event_t;
 

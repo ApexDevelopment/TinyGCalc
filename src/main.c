@@ -5,6 +5,7 @@
 #include <stdbool.h>
 
 int main(void) {
+    char final_expr[256] = {0};
     char expr_buf[256] = {0};
     size_t expr_len = 0;
     hal_display_init();
@@ -14,9 +15,7 @@ int main(void) {
     float x_max = 10.0f;
     float y_offset = 0.0f;
 
-    // Initial draw
     hal_display_fill_screen(0x0000);
-    plot_function("sin(x) + y", x_min, x_max, y_offset);
     hal_display_present();
 
     while (true) {
@@ -42,6 +41,17 @@ int main(void) {
                     case INPUT_SELECT:
                         printf("Select pressed\n");
                         break;
+                    case INPUT_ENTER:
+                        hal_display_fill_screen(0x0000);
+
+                        // Copy the expression buffer to the final expression
+                        snprintf(final_expr, sizeof(final_expr), "%s", expr_buf);
+                        // Reset the expression buffer
+                        expr_len = 0;
+                        expr_buf[0] = '\0';
+
+                        plot_function(final_expr, x_min, x_max, y_offset);
+                        break;
                     case INPUT_BACK:
                         printf("Exiting...\n");
                         return 0;
@@ -49,8 +59,6 @@ int main(void) {
                         break;
                 }
 
-                hal_display_fill_screen(0x0000);
-                plot_function("sin(x) + y", x_min, x_max, y_offset);
                 hal_display_present();
             }
             else if (event.type == INPUT_EVENT_KEY) {
@@ -58,8 +66,9 @@ int main(void) {
                     expr_buf[expr_len++] = event.key;
                     expr_buf[expr_len] = 0;
                 }
+
                 hal_display_fill_screen(0x0000);
-                plot_function("sin(x) + y", x_min, x_max, y_offset);
+                plot_function(final_expr, x_min, x_max, y_offset);
                 hal_display_draw_text(0, 0, expr_buf, 0xFFFF);
                 hal_display_present();
             }

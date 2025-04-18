@@ -22,7 +22,7 @@ bool hal_input_poll(hal_input_event_t* event) {
                 case SDLK_RIGHT:  btn = INPUT_RIGHT; break;
                 case SDLK_UP:     btn = INPUT_UP; break;
                 case SDLK_DOWN:   btn = INPUT_DOWN; break;
-                case SDLK_RETURN: btn = INPUT_SELECT; break;
+                case SDLK_RETURN: btn = INPUT_ENTER; break;
                 case SDLK_ESCAPE: btn = INPUT_BACK; break;
                 default: break;
             }
