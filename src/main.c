@@ -28,8 +28,13 @@ void zoom(float *min, float *max, float factor)
 {
 	float center	 = (*min + *max) / 2.0f;
 	float half_range = (*max - *min) / 2.0f * factor;
-	*min			 = center - half_range;
-	*max			 = center + half_range;
+
+	const float min_range = 0.0001f;
+
+	if (half_range < min_range) return; // do not zoom if it would be too small
+
+	*min = center - half_range;
+	*max = center + half_range;
 }
 
 void render(mode_t mode, float x_min, float x_max, float y_min, float y_max)
@@ -168,8 +173,15 @@ int main(void)
 					y_max -= 0.5f;
 					need_redraw = true;
 					break;
-				case INPUT_SELECT:
-					printf("Select pressed\n");
+				case INPUT_SELECT: // Zoom in
+					zoom(&x_min, &x_max, 0.8f);
+					zoom(&y_min, &y_max, 0.8f);
+					need_redraw = true;
+					break;
+				case INPUT_BACK: // Zoom out
+					zoom(&x_min, &x_max, 1.25f);
+					zoom(&y_min, &y_max, 1.25f);
+					need_redraw = true;
 					break;
 				case INPUT_ENTER:
 					snprintf(final_expr, sizeof(final_expr), "%s", expr_buf);
@@ -179,9 +191,6 @@ int main(void)
 					mode		= MODE_GRAPH;
 					need_redraw = true;
 					break;
-				case INPUT_BACK:
-					printf("Exiting...\n");
-					return 0;
 				}
 			}
 			else if (event.type == INPUT_EVENT_KEY)

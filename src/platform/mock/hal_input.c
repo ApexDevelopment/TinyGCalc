@@ -15,6 +15,12 @@ bool hal_input_poll(hal_input_event_t *event)
 		{
 			exit(0);
 		}
+		if (sdl_event.type == SDL_MOUSEWHEEL)
+		{
+			event->type	   = INPUT_EVENT_CONTROL;
+			event->control = (sdl_event.wheel.y > 0) ? INPUT_SELECT : INPUT_BACK;
+			return true;
+		}
 		if (sdl_event.type == SDL_KEYDOWN || sdl_event.type == SDL_KEYUP)
 		{
 			bool		  pressed = (sdl_event.type == SDL_KEYDOWN);
@@ -37,7 +43,11 @@ bool hal_input_poll(hal_input_event_t *event)
 				btn = INPUT_ENTER;
 				break;
 			case SDLK_ESCAPE:
+			case SDLK_PAGEDOWN:
 				btn = INPUT_BACK;
+				break;
+			case SDLK_PAGEUP:
+				btn = INPUT_SELECT;
 				break;
 			default:
 				break;
