@@ -1,0 +1,3 @@
+C:/Users/Micah/Documents/MEGA/Coding/TinyGCalc/build/CMakeFiles/tinygcalc.dir
+C:/Users/Micah/Documents/MEGA/Coding/TinyGCalc/build/CMakeFiles/edit_cache.dir
+C:/Users/Micah/Documents/MEGA/Coding/TinyGCalc/build/CMakeFiles/rebuild_cache.dir

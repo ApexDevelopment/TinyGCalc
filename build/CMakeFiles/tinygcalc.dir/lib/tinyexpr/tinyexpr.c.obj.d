@@ -1,0 +1,28 @@
+CMakeFiles/tinygcalc.dir/lib/tinyexpr/tinyexpr.c.obj: \
+ C:\Users\Micah\Documents\MEGA\Coding\TinyGCalc\lib\tinyexpr\tinyexpr.c \
+ C:\Users\Micah\Documents\MEGA\Coding\TinyGCalc\lib\tinyexpr\tinyexpr.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/stdlib.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/corecrt.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/_mingw.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/_mingw_mac.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/_mingw_secapi.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/vadefs.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/corecrt_wstdlib.h \
+ C:/Tools/mingw-w64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/limits.h \
+ C:/Tools/mingw-w64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/syslimits.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/limits.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/crtdefs.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/malloc.h \
+ C:/Tools/mingw-w64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/mm_malloc.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/errno.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/math.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/string.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/sec_api/string_s.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/stdio.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/_mingw_off_t.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/swprintf.inl \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
+ C:/Tools/mingw-w64/x86_64-w64-mingw32/include/ctype.h
