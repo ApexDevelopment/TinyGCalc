@@ -76,7 +76,13 @@ target_include_directories(tinygcalc PRIVATE
 
 # Link platform-specific libraries
 if(PLATFORM STREQUAL "pico")
-	target_link_libraries(tinygcalc pico_stdlib pico_time)
+	target_link_libraries(tinygcalc
+		pico_stdlib
+		pico_time
+		hardware_spi
+		hardware_gpio
+		hardware_dma
+	)
 	pico_add_extra_outputs(tinygcalc)
 elseif(DEFINED EXTRA_LIBS)
 	target_include_directories(tinygcalc PRIVATE "${SDL2_ROOT}/include")
