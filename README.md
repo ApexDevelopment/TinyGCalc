@@ -30,7 +30,7 @@ It builds cleanly for:
 Clone the repo and its submodules:
 
 ```bash
-git clone --recursive https://github.com/yourname/TinyGCalc.git
+git clone --recursive https://github.com/ApexDevelopment/TinyGCalc.git
 cd TinyGCalc
 ```
 
