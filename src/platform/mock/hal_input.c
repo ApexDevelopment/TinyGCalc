@@ -70,6 +70,7 @@ bool hal_input_poll(hal_input_event_t* event) {
                                 case SDLK_SLASH:        ch = shift ? '?' : '/'; break;
                                 case SDLK_BACKQUOTE:    ch = shift ? '~' : '`'; break;
                                 case SDLK_SPACE:        ch = ' '; break;
+                                case SDLK_BACKSPACE:    ch = '\b'; break;
                                 default: break;
                             }
                         }

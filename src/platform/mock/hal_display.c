@@ -10,69 +10,69 @@
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
+static SDL_Texture* texture = NULL;
+
+static uint16_t framebuffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 void hal_display_init(void) {
     SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow("TinyGCalc", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer); // Clear the screen once
-    // Do not present here; let main/rendering logic decide when to flush
+    SDL_RenderClear(renderer); // Clear the screen
+    memset(framebuffer, 0, sizeof(framebuffer)); // Clear the framebuffer
+    texture = SDL_CreateTexture(renderer,
+        SDL_PIXELFORMAT_RGB565,
+        SDL_TEXTUREACCESS_STREAMING,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT);
 }
 
 void hal_display_fill_screen(uint16_t color) {
-    uint8_t r = (color >> 11) & 0x1F;
-    uint8_t g = (color >> 5) & 0x3F;
-    uint8_t b = color & 0x1F;
-    r = (r << 3) | (r >> 2);
-    g = (g << 2) | (g >> 4);
-    b = (b << 3) | (b >> 2);
-
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
+    for (int y = 0; y < SCREEN_HEIGHT; ++y) {
+        for (int x = 0; x < SCREEN_WIDTH; ++x) {
+            framebuffer[y][x] = color;
+        }
+    }
 }
 
 void hal_display_draw_pixel(int x, int y, uint16_t color) {
-    uint8_t r = (color >> 11) & 0x1F;
-    uint8_t g = (color >> 5) & 0x3F;
-    uint8_t b = color & 0x1F;
-    r = (r << 3) | (r >> 2);
-    g = (g << 2) | (g >> 4);
-    b = (b << 3) | (b >> 2);
-
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-    SDL_RenderDrawPoint(renderer, x, y);
+    if (x >= 0 && x < SCREEN_WIDTH && y >= 0 && y < SCREEN_HEIGHT) {
+        framebuffer[y][x] = color;
+    }
 }
 
 void hal_display_draw_line(int x0, int y0, int x1, int y1, uint16_t color) {
-    uint8_t r = (color >> 11) & 0x1F;
-    uint8_t g = (color >> 5) & 0x3F;
-    uint8_t b = color & 0x1F;
-    r = (r << 3) | (r >> 2);
-    g = (g << 2) | (g >> 4);
-    b = (b << 3) | (b >> 2);
+    // Bresenham’s line algorithm
+    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    int err = dx + dy, e2;
 
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-    SDL_RenderDrawLine(renderer, x0, y0, x1, y1);
+    while (1) {
+        hal_display_draw_pixel(x0, y0, color);
+
+        if (x0 == x1 && y0 == y1) break;
+
+        e2 = 2 * err;
+        if (e2 >= dy) { err += dy; x0 += sx; }
+        if (e2 <= dx) { err += dx; y0 += sy; }
+    }
 }
 
 void hal_display_present(void) {
+    void* pixels;
+    int pitch;
+    SDL_LockTexture(texture, NULL, &pixels, &pitch);
+    memcpy(pixels, framebuffer, sizeof(framebuffer));
+    SDL_UnlockTexture(texture);
+
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);
 }
 
 void hal_display_draw_text(int x, int y, const char* text, uint16_t color) {
-    printf("Drawing text: %s\n", text);
-    uint8_t r = (color >> 11) & 0x1F;
-    uint8_t g = (color >> 5) & 0x3F;
-    uint8_t b = color & 0x1F;
-    r = (r << 3) | (r >> 2);
-    g = (g << 2) | (g >> 4);
-    b = (b << 3) | (b >> 2);
-
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-
     const int char_w = 6;
     const int char_h = 8;
 
@@ -81,15 +81,16 @@ void hal_display_draw_text(int x, int y, const char* text, uint16_t color) {
 
     for (int i = 0; text[i] != 0; ++i) {
         char c = text[i];
+        // Printable ASCII range
         if (c < 32 || c > 127) continue;
 
         const uint8_t* glyph = font6x8[c];
-    
+
         for (int col = 0; col < char_w; ++col) {
             uint8_t bits = glyph[col];
             for (int row = 0; row < char_h; ++row) {
                 if (bits & (1 << row)) {
-                    SDL_RenderDrawPoint(renderer, cx + col, cy + row);
+                    hal_display_draw_pixel(cx + col, cy + row, color);
                 }
             }
         }
