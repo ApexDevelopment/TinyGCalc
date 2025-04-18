@@ -1,0 +1,16 @@
+# .clang-format for TinyGCalc
+BasedOnStyle: LLVM
+Language: C
+UseTab: Always
+IndentWidth: 4
+TabWidth: 4
+AllowShortIfStatementsOnASingleLine: true
+BreakBeforeBraces: Allman  # Matches typical embedded C style
+ColumnLimit: 120
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+SortIncludes: false
+SpaceAfterCStyleCast: true
+SpacesInParentheses: false
+SpacesInAngles: false
+SpacesInContainerLiterals: false
