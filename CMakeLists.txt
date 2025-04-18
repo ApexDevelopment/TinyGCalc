@@ -24,6 +24,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(SRC_FILES
 	src/main.c
 	src/core/plotter.c
+    src/core/graph_utils.c
 	lib/tinyexpr/tinyexpr.c
 )
 
