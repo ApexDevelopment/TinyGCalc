@@ -116,3 +116,4 @@ It includes third-party code licensed under:
 
 - zlib (TinyExpr, SDL2)
 - BSD 3-Clause (Pico SDK)
+- GNU GPL 3.0 (font6x8)
