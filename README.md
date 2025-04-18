@@ -50,7 +50,7 @@ build.bat
 
 ### Pico SDK Setup
 
-TinyGCalc expects the Pico SDK to be installed globally for embedded targets. You can set the SDK location when running CMake:
+TinyGCalc expects the Pico SDK to be installed globally. You can set the SDK location when running CMake:
 
 ```bash
 cmake -DPICO_SDK_PATH=/path/to/pico-sdk ..
@@ -98,11 +98,11 @@ TinyGCalc supports basic input when running on the `mock` platform with SDL2. Th
 
 - Arrow keys: Pan left/right/up/down
 - Escape: Exit
-- Enter: Select (currently unused)
+
+Start typing an expression to enter the expression editor. Then press Enter to plot the expression.
 
 Planned features include:
 
-- Expression editing and input
 - Zooming in/out of the graph
 - On-device navigation for embedded platforms
 
