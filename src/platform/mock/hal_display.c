@@ -1,7 +1,9 @@
 #include "hal/hal_display.h"
+#include "core/font6x8.h"
 #include <SDL2/SDL.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
@@ -58,6 +60,42 @@ void hal_display_draw_line(int x0, int y0, int x1, int y1, uint16_t color) {
 
 void hal_display_present(void) {
     SDL_RenderPresent(renderer);
+}
+
+void hal_display_draw_text(int x, int y, const char* text, uint16_t color) {
+    printf("Drawing text: %s\n", text);
+    uint8_t r = (color >> 11) & 0x1F;
+    uint8_t g = (color >> 5) & 0x3F;
+    uint8_t b = color & 0x1F;
+    r = (r << 3) | (r >> 2);
+    g = (g << 2) | (g >> 4);
+    b = (b << 3) | (b >> 2);
+
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+
+    const int char_w = 6;
+    const int char_h = 8;
+
+    int cx = x * char_w;
+    int cy = y * char_h;
+
+    for (int i = 0; text[i] != 0; ++i) {
+        char c = text[i];
+        if (c < 32 || c > 127) continue;
+
+        const uint8_t* glyph = font6x8[c];
+    
+        for (int col = 0; col < char_w; ++col) {
+            uint8_t bits = glyph[col];
+            for (int row = 0; row < char_h; ++row) {
+                if (bits & (1 << row)) {
+                    SDL_RenderDrawPoint(renderer, cx + col, cy + row);
+                }
+            }
+        }
+
+        cx += char_w;
+    }
 }
 
 int hal_display_get_width(void) {

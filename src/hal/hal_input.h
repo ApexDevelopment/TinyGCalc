@@ -18,8 +18,22 @@ typedef enum {
     INPUT_BACK
 } input_event_t;
 
+typedef enum {
+    INPUT_EVENT_NONE,
+    INPUT_EVENT_KEY,
+    INPUT_EVENT_CONTROL
+} input_event_type_t;
+
+typedef struct {
+    input_event_type_t type;
+    union {
+        input_event_t control; // e.g. INPUT_LEFT, INPUT_BACK
+        char key;              // typed character like 'a', '(', '='
+    };
+} hal_input_event_t;
+
 void hal_input_init(void);
-bool hal_input_poll(input_event_t* event); // Returns true if event was read
+bool hal_input_poll(hal_input_event_t* event); // Returns true if event was read
 
 // Optional convenience function for state-based polling (e.g. for holding buttons)
 bool hal_input_is_pressed(input_event_t event);
