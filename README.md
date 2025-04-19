@@ -97,14 +97,12 @@ Valid options: `mock`, `pico`, `stm32` (planned)
 TinyGCalc supports basic input when running on the `mock` platform with SDL2. This implementation is intended for testing and development purposes only — future versions will include a more complete, embedded-friendly user interface:
 
 - Arrow keys: Pan left/right/up/down
+- Scroll wheel or PgUp/PgDn: Zoom in/out
 - Escape: Exit
 
 Start typing an expression to enter the expression editor. Then press Enter to plot the expression.
 
-Planned features include:
-
-- Zooming in/out of the graph
-- On-device navigation for embedded platforms
+More features are planned for the future.
 
 ---
 
