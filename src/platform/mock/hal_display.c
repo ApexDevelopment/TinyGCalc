@@ -88,11 +88,11 @@ void hal_display_present(void)
 
 void hal_display_draw_text(int x, int y, const char *text, uint16_t color)
 {
-	const int char_w = 6;
-	const int char_h = 8;
+	int char_width	= hal_display_get_font_width();
+	int char_height = hal_display_get_font_height();
 
-	int cx = x * char_w;
-	int cy = y * char_h;
+	int cx = x * char_width;
+	int cy = y * char_height;
 
 	for (int i = 0; text[i] != 0; ++i)
 	{
@@ -102,10 +102,10 @@ void hal_display_draw_text(int x, int y, const char *text, uint16_t color)
 
 		const uint8_t *glyph = font6x8[c];
 
-		for (int col = 0; col < char_w; ++col)
+		for (int col = 0; col < char_width; ++col)
 		{
 			uint8_t bits = glyph[col];
-			for (int row = 0; row < char_h; ++row)
+			for (int row = 0; row < char_height; ++row)
 			{
 				if (bits & (1 << row))
 				{
@@ -114,10 +114,14 @@ void hal_display_draw_text(int x, int y, const char *text, uint16_t color)
 			}
 		}
 
-		cx += char_w;
+		cx += char_width;
 	}
 }
 
 int hal_display_get_width(void) { return SCREEN_WIDTH; }
 
 int hal_display_get_height(void) { return SCREEN_HEIGHT; }
+
+int hal_display_get_font_width(void) { return FONT6X8_WIDTH; }
+
+int hal_display_get_font_height(void) { return FONT6X8_HEIGHT; }

@@ -9,14 +9,20 @@ extern "C" {
 #endif
 
 typedef enum {
-	INPUT_NONE = 0,
-	INPUT_LEFT,
-	INPUT_RIGHT,
-	INPUT_UP,
-	INPUT_DOWN,
-	INPUT_SELECT,
-	INPUT_ENTER,
-	INPUT_BACK
+    INPUT_NONE = 0,
+    INPUT_LEFT,
+    INPUT_RIGHT,
+    INPUT_UP,
+    INPUT_DOWN,
+    INPUT_SELECT,
+    INPUT_BACK,
+    INPUT_ENTER,
+    INPUT_F1,
+    INPUT_F2,
+    INPUT_F3,
+    INPUT_F4,
+    INPUT_F5,
+    INPUT_F6
 } input_event_t;
 
 typedef enum {

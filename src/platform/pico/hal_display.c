@@ -162,4 +162,9 @@ void hal_display_draw_text(int x, int y, const char *text, uint16_t color)
 }
 
 int hal_display_get_width(void) { return SCREEN_WIDTH; }
+
 int hal_display_get_height(void) { return SCREEN_HEIGHT; }
+
+int hal_display_get_font_width(void) { return FONT6X8_WIDTH; }
+
+int hal_display_get_font_height(void) { return FONT6X8_HEIGHT; }

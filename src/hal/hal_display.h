@@ -17,6 +17,9 @@ void hal_display_draw_text(int x, int y, const char* text, uint16_t color);
 int hal_display_get_width(void);
 int hal_display_get_height(void);
 
+int hal_display_get_font_width(void);
+int hal_display_get_font_height(void);
+
 #ifdef __cplusplus
 }
 #endif

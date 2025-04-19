@@ -5,6 +5,7 @@
 #include "core/types.h"
 #include "core/ui_text.h"
 #include "core/ui_graph.h"
+#include "core/ui_eqedit.h"
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -32,10 +33,15 @@ static void render(void)
 		ui_text_render();
 		break;
 	case MODE_GRAPH:
-		ui_graph_render(final_expr, x_min, x_max, y_min, y_max);
+		ui_graph_render(x_min, x_max, y_min, y_max);
 		break;
 	case MODE_TABLE:
 		hal_display_draw_text(0, 0, "Table view coming soon", 0xFFFF);
+		break;
+	case MODE_EQLIST:
+		ui_eqedit_render();
+		break;
+	default:
 		break;
 	}
 
@@ -58,62 +64,90 @@ int main(void)
 		{
 			if (event.type == INPUT_EVENT_CONTROL)
 			{
-				switch (event.control)
+				if (event.control == INPUT_F1)
 				{
-				case INPUT_LEFT:
-					x_min -= 0.5f;
-					x_max -= 0.5f;
-					need_redraw = true;
+					mode = MODE_EQLIST;
+					render();
+					continue;
+				}
+
+				bool handled = false;
+
+				switch (mode)
+				{
+				case MODE_TEXT:
+					handled = ui_text_handle_control(event.control, &mode);
 					break;
-				case INPUT_RIGHT:
-					x_min += 0.5f;
-					x_max += 0.5f;
-					need_redraw = true;
+				case MODE_GRAPH:
 					break;
-				case INPUT_UP:
-					y_min += 0.5f;
-					y_max += 0.5f;
-					need_redraw = true;
+				case MODE_TABLE:
+					mode	= MODE_TEXT;
+					handled = true;
 					break;
-				case INPUT_DOWN:
-					y_min -= 0.5f;
-					y_max -= 0.5f;
-					need_redraw = true;
+				case MODE_EQLIST:
+					handled = ui_eqedit_handle_control(event.control, &mode);
 					break;
-				case INPUT_SELECT: // Zoom in
-					ui_graph_zoom(&x_min, &x_max, 0.8f);
-					ui_graph_zoom(&y_min, &y_max, 0.8f);
-					need_redraw = true;
-					break;
-				case INPUT_BACK: // Zoom out
-					ui_graph_zoom(&x_min, &x_max, 1.25f);
-					ui_graph_zoom(&y_min, &y_max, 1.25f);
-					need_redraw = true;
-					break;
-				case INPUT_ENTER: // Evaluate and switch to graph
-					snprintf(final_expr, sizeof(final_expr), "%s", expr_buf);
-					ui_text_clear();
-					mode		= MODE_GRAPH;
-					need_redraw = true;
+				default:
 					break;
 				}
+
+				if (!handled)
+				{
+					// fallback controls
+					switch (event.control)
+					{
+					case INPUT_LEFT:
+						x_min -= 0.5f;
+						x_max -= 0.5f;
+						break;
+					case INPUT_RIGHT:
+						x_min += 0.5f;
+						x_max += 0.5f;
+						break;
+					case INPUT_UP:
+						y_min += 0.5f;
+						y_max += 0.5f;
+						break;
+					case INPUT_DOWN:
+						y_min -= 0.5f;
+						y_max -= 0.5f;
+						break;
+					case INPUT_SELECT:
+						ui_graph_zoom(&x_min, &x_max, 0.8f);
+						ui_graph_zoom(&y_min, &y_max, 0.8f);
+						break;
+					case INPUT_BACK:
+						ui_graph_zoom(&x_min, &x_max, 1.25f);
+						ui_graph_zoom(&y_min, &y_max, 1.25f);
+						break;
+					default:
+						break;
+					}
+				}
+
+				need_redraw = true;
 			}
 			else if (event.type == INPUT_EVENT_KEY)
 			{
-				if (event.key == '\b' || event.key == 127)
+				bool handled = false;
+
+				switch (mode)
 				{
-					ui_text_handle_backspace();
-				}
-				else
-				{
+				case MODE_TEXT:
 					ui_text_handle_key(event.key);
+					handled = true;
+					break;
+				case MODE_EQLIST:
+					handled = ui_eqedit_handle_key(event.key);
+					break;
+				default:
+					break;
 				}
 
-				if (mode != MODE_TEXT)
+				if (handled)
 				{
-					mode = MODE_TEXT;
+					need_redraw = true;
 				}
-				need_redraw = true;
 			}
 
 			if (need_redraw)

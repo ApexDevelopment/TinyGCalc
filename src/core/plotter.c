@@ -16,7 +16,7 @@ static bool eval_safe(te_expr *expr, double *out)
 	return true;
 }
 
-void plot_function(const char *expr, float x_min, float x_max, float y_min, float y_max)
+void plot_function(const char *expr, float x_min, float x_max, float y_min, float y_max, uint16_t color)
 {
 	int width  = hal_display_get_width();
 	int height = hal_display_get_height();
@@ -51,7 +51,7 @@ void plot_function(const char *expr, float x_min, float x_max, float y_min, floa
 
 		if (has_prev)
 		{
-			hal_display_draw_line(prev_px, prev_py, px, py, 0xFFFF); // white line
+			hal_display_draw_line(prev_px, prev_py, px, py, color);
 		}
 
 		prev_px	 = px;

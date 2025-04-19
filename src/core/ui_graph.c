@@ -1,6 +1,7 @@
 #include "hal/hal_display.h"
-#include "core/plotter.h"
+#include "core/eqlist.h"
 #include "core/graph_utils.h"
+#include "core/plotter.h"
 #include "core/ui_graph.h"
 #include <math.h>
 #include <stdbool.h>
@@ -16,10 +17,8 @@ void ui_graph_zoom(float *min, float *max, float factor)
 	*max = center + half_range;
 }
 
-void ui_graph_render(const char *expr, float x_min, float x_max, float y_min, float y_max)
+void ui_graph_render(float x_min, float x_max, float y_min, float y_max)
 {
-	hal_display_draw_text(0, 0, expr, 0xFFFF);
-
 	int width  = hal_display_get_width();
 	int height = hal_display_get_height();
 
@@ -74,5 +73,13 @@ void ui_graph_render(const char *expr, float x_min, float x_max, float y_min, fl
 		}
 	}
 
-	plot_function(expr, x_min, x_max, y_min, y_max);
+	for (int i = 0; i < MAX_EQUATIONS; ++i)
+	{
+		if (!eq_list[i].active || eq_list[i].expr[0] == '\0') continue;
+
+		// Generate a unique color (basic color cycling)
+		uint16_t color = 0xFFFF - (i * 0x421); // simple offset for visibility
+
+		plot_function(eq_list[i].expr, x_min, x_max, y_min, y_max, color);
+	}
 }

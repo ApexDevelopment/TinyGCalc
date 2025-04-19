@@ -43,11 +43,32 @@ bool hal_input_poll(hal_input_event_t *event)
 				btn = INPUT_ENTER;
 				break;
 			case SDLK_ESCAPE:
+				btn = INPUT_BACK;
+				break;
 			case SDLK_PAGEDOWN:
 				btn = INPUT_BACK;
 				break;
 			case SDLK_PAGEUP:
 				btn = INPUT_SELECT;
+				break;
+
+			case SDLK_F1:
+				btn = INPUT_F1;
+				break;
+			case SDLK_F2:
+				btn = INPUT_F2;
+				break;
+			case SDLK_F3:
+				btn = INPUT_F3;
+				break;
+			case SDLK_F4:
+				btn = INPUT_F4;
+				break;
+			case SDLK_F5:
+				btn = INPUT_F5;
+				break;
+			case SDLK_F6:
+				btn = INPUT_F6;
 				break;
 			default:
 				break;
