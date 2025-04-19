@@ -11,11 +11,11 @@
 #define SCREEN_HEIGHT 320
 
 #define SPI_PORT spi1
-#define PIN_MOSI 11
-#define PIN_SCK 10
-#define PIN_CS 9
-#define PIN_DC 8
-#define PIN_RST 12
+#define PIN_MOSI 11 // GP11, pin 15
+#define PIN_SCK 10	// GP10, pin 14
+#define PIN_CS 13	// GP13, pin 17
+#define PIN_DC 14	// GP14, pin 19
+#define PIN_RST 15	// GP15, pin 20
 
 static uint16_t framebuffer[SCREEN_HEIGHT][SCREEN_WIDTH];
 

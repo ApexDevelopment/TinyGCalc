@@ -80,6 +80,7 @@ if(PLATFORM STREQUAL "pico")
 		pico_stdlib
 		pico_time
 		hardware_spi
+		hardware_i2c
 		hardware_gpio
 		hardware_dma
 	)
