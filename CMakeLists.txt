@@ -43,6 +43,7 @@ if(PLATFORM STREQUAL "pico")
 	set(PICO_BOARD pico)
 	set(PICO_BOOT_STAGE2_IMPLEMENTATION "${PICO_SDK_PATH}/src/rp2_common/boot_stage2/boot2_w25q080.c")
 
+	set(PICO_NO_PICOTOOL 1)
 	include(${PICO_SDK_PATH}/pico_sdk_init.cmake)
 	pico_sdk_init()
 
@@ -85,6 +86,8 @@ if(PLATFORM STREQUAL "pico")
 	target_link_libraries(tinygcalc
 		pico_stdlib
 		pico_time
+		pico_stdio_usb
+		# pico_stdio_uart
 		hardware_spi
 		hardware_i2c
 		hardware_gpio
