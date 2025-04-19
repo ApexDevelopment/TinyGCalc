@@ -94,13 +94,12 @@ Valid options: `mock`, `pico`, `stm32` (planned)
 
 ## Controls
 
-TinyGCalc supports basic input when running on the `mock` platform with SDL2. This implementation is intended for testing and development purposes only — future versions will include a more complete, embedded-friendly user interface:
+TinyGCalc supports keyboard input when running on the `mock` platform with SDL2.
 
-- Arrow keys: Pan left/right/up/down
-- Scroll wheel or PgUp/PgDn: Zoom in/out
-- Escape: Exit
-
-Start typing an expression to enter the expression editor. Then press Enter to plot the expression.
+- Simply start typing to enter an expression. Press enter to evaluate it.
+- F1 enters the equation editor. Use arrow keys to navigate and enter to plot all equations.
+- While in graph view, use arrow keys to pan, mouse wheel to zoom, and enter to return to the editor.
+- While in the editor, press escape to return to the REPL (expression evaluator).
 
 More features are planned for the future.
 

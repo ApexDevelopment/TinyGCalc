@@ -92,6 +92,9 @@ bool ui_eqedit_handle_control(input_event_t btn, mode_t *mode_out)
 	case INPUT_ENTER:
 		*mode_out = MODE_GRAPH;
 		return true;
+	case INPUT_BACK:
+		*mode_out = MODE_TEXT;
+		return true;
 	default:
 		return false;
 	}

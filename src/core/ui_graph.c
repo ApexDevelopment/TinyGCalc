@@ -7,6 +7,20 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+bool ui_graph_handle_control(input_event_t btn, mode_t *mode_out)
+{
+	switch (btn)
+	{
+	case INPUT_ENTER:
+	case INPUT_F1:
+		*mode_out = MODE_EQLIST;
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
+
 void ui_graph_zoom(float *min, float *max, float factor)
 {
 	float		center	   = (*min + *max) / 2.0f;

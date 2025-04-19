@@ -79,6 +79,7 @@ int main(void)
 					handled = ui_text_handle_control(event.control, &mode);
 					break;
 				case MODE_GRAPH:
+					handled = ui_graph_handle_control(event.control, &mode);
 					break;
 				case MODE_TABLE:
 					mode	= MODE_TEXT;
