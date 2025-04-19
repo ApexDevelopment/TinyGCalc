@@ -5,13 +5,23 @@
 #include <math.h>
 #include <stdbool.h>
 
+static bool eval_safe(te_expr *expr, double *out)
+{
+	double result = te_eval(expr);
+	if (isnan(result) || isinf(result))
+	{
+		return false;
+	}
+	*out = result;
+	return true;
+}
+
 void plot_function(const char *expr, float x_min, float x_max, float y_min, float y_max)
 {
 	int width  = hal_display_get_width();
 	int height = hal_display_get_height();
 
-	double x = 0.0;
-
+	double		x	   = 0.0;
 	te_variable vars[] = {{"x", &x}};
 
 	int		 err;
@@ -28,8 +38,14 @@ void plot_function(const char *expr, float x_min, float x_max, float y_min, floa
 
 	for (int px = 0; px < width; px++)
 	{
-		x			  = x_min + px * dx;
-		double result = te_eval(compiled);
+		x = x_min + px * dx;
+
+		double result;
+		if (!eval_safe(compiled, &result))
+		{
+			has_prev = false; // discontinuity
+			continue;
+		}
 
 		int py = screen_y((float) result, y_min, y_max, height);
 
