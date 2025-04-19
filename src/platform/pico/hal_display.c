@@ -1,4 +1,5 @@
 #include "pico/stdlib.h"
+#include "core/font6x8.h"
 #include "hal/hal_display.h"
 #include "hardware/spi.h"
 #include "hardware/gpio.h"

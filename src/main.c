@@ -8,7 +8,6 @@
 #include "core/ui_eqedit.h"
 
 #include <stdbool.h>
-#include <stdio.h>
 #include <string.h>
 
 static char	  final_expr[256] = {0};
@@ -50,6 +49,7 @@ static void render(void)
 
 int main(void)
 {
+	stdio_init_all();
 	hal_display_init();
 	hal_input_init();
 

@@ -36,14 +36,9 @@ set(SRC_FILES
 
 # Platform-specific sources and config
 if(PLATFORM STREQUAL "pico")
-	if(NOT DEFINED PICO_SDK_PATH)
-		message(FATAL_ERROR "PICO_SDK_PATH is not set.")
-	endif()
-
 	set(PICO_BOARD pico)
-	set(PICO_BOOT_STAGE2_IMPLEMENTATION "${PICO_SDK_PATH}/src/rp2_common/boot_stage2/boot2_w25q080.c")
+	set(PICO_DEFAULT_BOOT_STAGE2_FILE "${PICO_SDK_PATH}/src/rp2040/boot_stage2/boot2_w25q080.S")
 
-	include(${PICO_SDK_PATH}/pico_sdk_init.cmake)
 	pico_sdk_init()
 
 	list(APPEND SRC_FILES
