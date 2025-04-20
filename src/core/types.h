@@ -6,7 +6,7 @@ typedef enum {
     MODE_GRAPH,
     MODE_TABLE,
 	MODE_EQLIST
-} mode_t;
+} ui_mode_t;
 
 typedef enum {
     DISPLAY_ROTATE_0,

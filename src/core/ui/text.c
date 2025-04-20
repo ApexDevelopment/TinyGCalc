@@ -29,7 +29,7 @@ void ui_text_handle_key(char key)
 	cursor_pos++;
 }
 
-bool ui_text_handle_control(input_event_t btn, mode_t *mode_out)
+bool ui_text_handle_control(input_event_t btn, ui_mode_t *mode_out)
 {
 	switch (btn)
 	{

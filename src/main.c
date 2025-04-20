@@ -10,8 +10,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-static char	  final_expr[256] = {0};
-static mode_t mode			  = MODE_TEXT;
+static char		 final_expr[256] = {0};
+static ui_mode_t mode			 = MODE_TEXT;
 
 static float x_min = -10.0f;
 static float x_max = 10.0f;

@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-bool ui_graph_handle_control(input_event_t btn, mode_t *mode_out)
+bool ui_graph_handle_control(input_event_t btn, ui_mode_t *mode_out)
 {
 	switch (btn)
 	{
