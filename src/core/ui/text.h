@@ -1,5 +1,5 @@
-#ifndef UI_TEXT_H
-#define UI_TEXT_H
+#ifndef TEXT_H
+#define TEXT_H
 
 #include "core/types.h"
 #include "hal/hal_input.h"
@@ -18,4 +18,4 @@ void ui_text_handle_backspace(void);
 void ui_text_render(void);
 void ui_text_clear(void);
 
-#endif // UI_TEXT_H
+#endif // TEXT_H

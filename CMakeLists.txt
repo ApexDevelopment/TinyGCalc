@@ -32,10 +32,6 @@ endif()
 
 # Only include Pico SDK if platform is Pico
 if(PLATFORM STREQUAL "pico")
-	if(NOT DEFINED PICO_SDK_PATH)
-		message(FATAL_ERROR "PICO_SDK_PATH is not set.")
-	endif()
-
 	include(pico_sdk_import.cmake)
 endif()
 
@@ -55,9 +51,9 @@ set(SRC_FILES
 	src/core/font6x8.c
 	src/core/plotter.c
 	src/core/repl.c
-	src/core/ui_eqedit.c
-	src/core/ui_graph.c
-	src/core/ui_text.c
+	src/core/ui/eqedit.c
+	src/core/ui/plot.c
+	src/core/ui/text.c
 	src/core/utils/display.c
 	src/core/utils/graph.c
 	lib/tinyexpr/tinyexpr.c
@@ -127,6 +123,21 @@ if(PLATFORM STREQUAL "pico")
 		hardware_dma
 	)
 	pico_add_extra_outputs(tinygcalc)
+
+	if (PICOTOOL_EXECUTABLE)
+		# Create UF2 from ELF using system-installed picotool
+		add_custom_command(
+			TARGET tinygcalc POST_BUILD
+			COMMAND ${PICOTOOL_EXECUTABLE} uf2 convert $<TARGET_FILE:tinygcalc>
+					$<TARGET_FILE_DIR:tinygcalc>/tinygcalc.uf2
+			COMMENT "Generating tinygcalc.uf2 using system picotool"
+		)
+
+		# Add it as a build target so it appears in IDEs or ALL builds
+		add_custom_target(tinygcalc_uf2 ALL
+			DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/tinygcalc.uf2
+		)
+	endif()
 elseif(DEFINED EXTRA_LIBS)
 	target_include_directories(tinygcalc PRIVATE "${SDL2_ROOT}/include")
 	target_link_directories(tinygcalc PRIVATE "${SDL2_ROOT}/lib")

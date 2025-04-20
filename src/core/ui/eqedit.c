@@ -1,4 +1,4 @@
-#include "core/ui_eqedit.h"
+#include "core/ui/eqedit.h"
 #include "core/eqlist.h"
 #include "hal/hal_display.h"
 #include <string.h>

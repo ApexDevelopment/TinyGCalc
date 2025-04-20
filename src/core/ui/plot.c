@@ -2,7 +2,7 @@
 #include "core/eqlist.h"
 #include "core/utils/graph.h"
 #include "core/plotter.h"
-#include "core/ui_graph.h"
+#include "core/ui/plot.h"
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>

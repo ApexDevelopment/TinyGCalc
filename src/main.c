@@ -3,9 +3,9 @@
 #include "hal/hal_time.h"
 
 #include "core/types.h"
-#include "core/ui_text.h"
-#include "core/ui_graph.h"
-#include "core/ui_eqedit.h"
+#include "core/ui/text.h"
+#include "core/ui/plot.h"
+#include "core/ui/eqedit.h"
 
 #include <stdbool.h>
 #include <string.h>

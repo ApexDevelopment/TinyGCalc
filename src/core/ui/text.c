@@ -1,6 +1,6 @@
 #include "tinyexpr.h"
 #include "core/repl.h"
-#include "core/ui_text.h"
+#include "core/ui/text.h"
 #include "hal/hal_display.h"
 #include <math.h>
 #include <stdio.h>
