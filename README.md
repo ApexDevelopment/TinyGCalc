@@ -44,7 +44,7 @@ build.bat
 ./build.sh
 ```
 
-> By default, both scripts build the `mock` (desktop SDL2) platform using your native compiler (e.g. MinGW or GCC). You can override this by setting the `PLATFORM` environment variable.
+> By default, both scripts build the `mock` (desktop SDL2) platform using your native compiler (e.g. MinGW or GCC). You can build for a specific platform with `build [platform]`. For example, `build picow` will build a UF2 for the Pi Pico W.
 
 ---
 
@@ -72,23 +72,9 @@ Or set it globally in your shell:
 export PICO_SDK_PATH=$HOME/pico-sdk
 ```
 
----
-
-### Advanced Configuration
-
-Override the target platform manually:
-
-```bash
-PLATFORM=pico ./build.sh                     # Linux/macOS/WSL
-set PLATFORM=pico && build.bat               # Windows
-```
-
-The build system will:
-- Use your system compiler for `mock`
-- Use `arm-none-eabi-gcc` and the Pico SDK for `pico`
-- Only compile and link sources relevant to the selected platform
-
-Valid options: `mock`, `pico`, `stm32` (planned)
+> Pitfall: if you are building for a Pico board and you don't have `picotool` installed, it will be built from source.
+This can cause CMake to choke on `mbedtls`. In that case you should either install picotool, or patch that `CMakeLists.txt`
+file to ask for a newer version of CMake.
 
 ---
 
