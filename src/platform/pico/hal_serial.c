@@ -1,11 +1,21 @@
 #include "hal/hal_serial.h"
 #include "pico/stdlib.h"
 
+#include <stdint.h>
 #include <stdio.h>
 
 static int buffered_char = PICO_ERROR_TIMEOUT;
 
-void hal_serial_init(void) { stdio_init_all(); }
+void hal_serial_init(void)
+{
+	stdio_init_all();
+
+	// Flush any buffered input
+	while (hal_serial_input_available())
+	{
+		(void) hal_serial_read_char();
+	}
+}
 
 bool hal_serial_input_available(void)
 {
@@ -28,9 +38,13 @@ char hal_serial_read_char(void)
 	else
 	{
 		result = getchar(); // fallback if polled directly
+		if (result == EOF)
+		{
+			return 0;
+		}
 	}
 
-	return (char) result;
+	return (char) (uint8_t) result;
 }
 
 void hal_serial_write_char(char c) { putchar(c); }

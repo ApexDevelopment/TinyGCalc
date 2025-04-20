@@ -6,7 +6,6 @@
 #include "core/ui_text.h"
 #include "core/ui_graph.h"
 #include "core/ui_eqedit.h"
-#include "core/repl_serial.h"
 
 #include <stdbool.h>
 #include <string.h>
@@ -50,7 +49,6 @@ static void render(void)
 
 int main(void)
 {
-	repl_serial_init();
 	hal_display_init();
 	hal_input_init();
 
@@ -60,7 +58,6 @@ int main(void)
 	{
 		hal_input_event_t event;
 		bool			  need_redraw = false;
-		repl_serial_poll();
 
 		if (hal_input_poll(&event))
 		{

@@ -56,7 +56,6 @@ set(SRC_FILES
 	src/core/graph_utils.c
 	src/core/plotter.c
 	src/core/repl.c
-	src/core/repl_serial.c
 	src/core/ui_eqedit.c
 	src/core/ui_graph.c
 	src/core/ui_text.c
@@ -71,7 +70,8 @@ if(PLATFORM STREQUAL "pico")
 	pico_sdk_init()
 
 	list(APPEND SRC_FILES
-		src/platform/pico/hal_display.c
+		#src/platform/pico/hal_display_st7789.c
+		src/platform/pico/hal_display_sh1106.c
 		src/platform/pico/hal_input.c
 		src/platform/pico/hal_time.c
 		src/platform/pico/hal_serial.c
