@@ -1,60 +1,82 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
 
-# === Clean target ===
-if [[ "$1" == "clean" ]]; then
-    echo "[INFO] Cleaning build directory..."
-    rm -rf build
+set -euo pipefail
+
+# === Defaults ===
+TARGET=${1:-mock}
+ACTION=${2:-build}
+
+# === Platform + board map ===
+PLATFORM=""
+PICO_BOARD_TYPE=""
+
+case "$TARGET" in
+  mock)
+    PLATFORM="mock"
+    ;;
+  pico)
+    PLATFORM="pico"
+    PICO_BOARD_TYPE="pico"
+    ;;
+  picow)
+    PLATFORM="pico"
+    PICO_BOARD_TYPE="pico_w"
+    ;;
+  clean)
+    echo "[INFO] Cleaning all build directories..."
+    rm -rf build/
     exit 0
+    ;;
+  *)
+    echo "[ERROR] Unknown target: $TARGET"
+    echo "Usage:"
+    echo "  ./build.sh [mock|pico|picow] [clean]"
+    exit 1
+    ;;
+esac
+
+# === Per-target clean ===
+if [[ "$ACTION" == "clean" ]]; then
+  echo "[INFO] Cleaning build/$TARGET..."
+  rm -rf "build/$TARGET"
+  exit 0
 fi
 
-# === Default to mock platform if none specified ===
-: "${PLATFORM:=mock}"
-echo "[INFO] PLATFORM=$PLATFORM"
-
-# === Check for Pico SDK only if targeting Pico ===
+# === Validate PICO_SDK_PATH if needed ===
 if [[ "$PLATFORM" == "pico" ]]; then
-    if [ -z "$PICO_SDK_PATH" ]; then
-        echo "[ERROR] PICO_SDK_PATH is not set."
-        echo "Please set the Pico SDK path like this:"
-        echo "  export PICO_SDK_PATH=\$HOME/pico-sdk"
-        echo "Or pass it to CMake:"
-        echo "  cmake -DPICO_SDK_PATH=\$HOME/pico-sdk .."
-        exit 1
-    fi
-
-    if [ ! -f "$PICO_SDK_PATH/pico_sdk_init.cmake" ]; then
-        echo "[ERROR] pico_sdk_init.cmake not found in $PICO_SDK_PATH"
-        echo "Please make sure you cloned the SDK:"
-        echo "  git clone https://github.com/raspberrypi/pico-sdk.git \$PICO_SDK_PATH"
-        exit 1
-    fi
+  if [[ -z "${PICO_SDK_PATH:-}" ]]; then
+    echo "[ERROR] PICO_SDK_PATH is not set"
+    echo "  export PICO_SDK_PATH=/path/to/pico-sdk"
+    exit 1
+  fi
+  if [[ ! -f "$PICO_SDK_PATH/pico_sdk_init.cmake" ]]; then
+    echo "[ERROR] pico_sdk_init.cmake not found in $PICO_SDK_PATH"
+    exit 1
+  fi
 fi
 
-# === Check for arm-none-eabi-gcc only for embedded targets ===
+# === Check for arm-none-eabi-gcc ===
 if [[ "$PLATFORM" != "mock" ]]; then
-    if ! command -v arm-none-eabi-gcc &> /dev/null; then
-        echo "[ERROR] arm-none-eabi-gcc not found in PATH."
-        echo "Install the ARM GCC toolchain (e.g., sudo apt install gcc-arm-none-eabi)"
-        exit 1
-    fi
+  if ! command -v arm-none-eabi-gcc > /dev/null; then
+    echo "[ERROR] arm-none-eabi-gcc not found in PATH"
+    exit 1
+  fi
 fi
 
-# === Create build directory ===
-mkdir -p build
-cd build
+# === Create and enter build directory ===
+BUILD_DIR="build/$TARGET"
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
 
-# === Use native toolchain if mock ===
-TOOLCHAIN_OPTION=""
-if [[ "$PLATFORM" == "mock" ]]; then
-    TOOLCHAIN_OPTION="-DCMAKE_TOOLCHAIN_FILE=../toolchain/native.cmake"
-fi
+# === Run CMake ===
+cmake ../.. \
+  -DPICO_SDK_PATH="$PICO_SDK_PATH" \
+  -DPLATFORM="$PLATFORM" \
+  -DPICO_BOARD_TYPE="$PICO_BOARD_TYPE" \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  -G "Unix Makefiles"
 
-# === Configure with CMake ===
-cmake .. $TOOLCHAIN_OPTION -DPICO_SDK_PATH="$PICO_SDK_PATH" -DPLATFORM="$PLATFORM" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+# === Build ===
+make -j
 
-# === Build with Make ===
-make -j"$(nproc)"
-
-echo "[SUCCESS] Build complete."
-cd ..
+echo "[SUCCESS] Build complete for target: $TARGET"

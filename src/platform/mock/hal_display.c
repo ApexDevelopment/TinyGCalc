@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
