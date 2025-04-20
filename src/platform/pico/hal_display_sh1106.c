@@ -17,6 +17,8 @@
 #define OLED_DC 21
 #define OLED_RST 20
 
+static display_rotation_t current_rotation = DISPLAY_ROTATE_0;
+
 static uint8_t buffer[OLED_BUFFER_SIZE];
 
 static inline void oled_command(uint8_t cmd)
@@ -91,8 +93,11 @@ void hal_display_present(void)
 
 void hal_display_draw_pixel(int x, int y, uint16_t color)
 {
+	transform_coords(&x, &y, OLED_WIDTH, OLED_HEIGHT, current_rotation);
 	if (x < 0 || x >= OLED_WIDTH || y < 0 || y >= OLED_HEIGHT) return;
+
 	int byte_index = x + (y / 8) * OLED_WIDTH;
+
 	if (color)
 	{
 		buffer[byte_index] |= (1 << (y % 8));
@@ -132,10 +137,22 @@ void hal_display_draw_line(int x0, int y0, int x1, int y1, uint16_t color)
 	// STUB: Bresenham or naive implementation can go here later
 }
 
-int hal_display_get_width(void) { return OLED_WIDTH; }
+int hal_display_get_width(void)
+{
+	if (current_rotation == DISPLAY_ROTATE_90 || current_rotation == DISPLAY_ROTATE_270) return OLED_HEIGHT;
+	return OLED_WIDTH;
+}
 
-int hal_display_get_height(void) { return OLED_HEIGHT; }
+int hal_display_get_height(void)
+{
+	if (current_rotation == DISPLAY_ROTATE_90 || current_rotation == DISPLAY_ROTATE_270) return OLED_WIDTH;
+	return OLED_HEIGHT;
+}
 
-int hal_display_get_font_width(void) { return 6; }
+int hal_display_get_font_width(void) { return FONT6X8_WIDTH; }
 
-int hal_display_get_font_height(void) { return 8; }
+int hal_display_get_font_height(void) { return FONT6X8_HEIGHT; }
+
+void hal_display_set_rotation(display_rotation_t rotation) { current_rotation = rotation; }
+
+display_rotation_t hal_display_get_rotation(void) { return current_rotation; }

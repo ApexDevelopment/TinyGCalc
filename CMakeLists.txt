@@ -53,12 +53,13 @@ set(SRC_FILES
 	src/main.c
 	src/core/eqlist.c
 	src/core/font6x8.c
-	src/core/graph_utils.c
 	src/core/plotter.c
 	src/core/repl.c
 	src/core/ui_eqedit.c
 	src/core/ui_graph.c
 	src/core/ui_text.c
+	src/core/utils/display.c
+	src/core/utils/graph.c
 	lib/tinyexpr/tinyexpr.c
 )
 

@@ -1,6 +1,6 @@
 #include "hal/hal_display.h"
 #include "core/eqlist.h"
-#include "core/graph_utils.h"
+#include "core/utils/graph.h"
 #include "core/plotter.h"
 #include "core/ui_graph.h"
 #include <math.h>

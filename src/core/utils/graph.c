@@ -1,4 +1,4 @@
-#include "graph_utils.h"
+#include "core/utils/graph.h"
 
 // Converts world X to screen X
 int screen_x(float x, float x_min, float x_max, int width)

@@ -1,11 +1,16 @@
 #ifndef HAL_DISPLAY_H
 #define HAL_DISPLAY_H
 
+#include "core/utils/display.h"
 #include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// Set rotation mode (drivers may ignore this)
+void hal_display_set_rotation(display_rotation_t rotation);
+display_rotation_t hal_display_get_rotation(void);
 
 void hal_display_init(void);
 void hal_display_present(void);

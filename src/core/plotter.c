@@ -1,7 +1,7 @@
 #include "plotter.h"
+#include "core/utils/graph.h"
 #include "hal/hal_display.h"
 #include "tinyexpr.h"
-#include "core/graph_utils.h"
 #include <math.h>
 #include <stdbool.h>
 
