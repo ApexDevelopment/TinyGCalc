@@ -1,3 +1,4 @@
+#include "core/utils/input.h"
 #include "hal/hal_input.h"
 #include "hal/hal_serial.h"
 #include "hardware/i2c.h"
@@ -30,10 +31,89 @@ bool hal_input_poll(hal_input_event_t *event)
 	// First: check serial input
 	if (hal_serial_input_available())
 	{
-		char c		= hal_serial_read_char();
+		char c = hal_serial_read_char();
+
+		// Try to detect ANSI escape sequences (e.g. F1 = ESC O P)
+		if (c == 0x1B && hal_serial_input_available())
+		{
+			char next = hal_serial_read_char();
+
+			if (next == 'O' && hal_serial_input_available())
+			{
+				char code	= hal_serial_read_char();
+				event->type = INPUT_EVENT_CONTROL;
+
+				switch (code)
+				{
+				case 'P':
+					event->control = INPUT_F1;
+					return true;
+				case 'Q':
+					event->control = INPUT_F2;
+					return true;
+				case 'R':
+					event->control = INPUT_F3;
+					return true;
+				case 'S':
+					event->control = INPUT_F4;
+					return true;
+				case 'T':
+					event->control = INPUT_F5;
+					return true;
+				case 'U':
+					event->control = INPUT_F6;
+					return true;
+				}
+			}
+			else if (next == '[')
+			{
+				char d1 = 0, d2 = 0;
+				if (hal_serial_input_available()) d1 = hal_serial_read_char();
+				if (hal_serial_input_available()) d2 = hal_serial_read_char();
+
+				// Expect ending '~'
+				if (hal_serial_input_available())
+				{
+					char tilde = hal_serial_read_char();
+					if (tilde == '~')
+					{
+						int code	= parse_two_digits(d1, d2);
+						event->type = INPUT_EVENT_CONTROL;
+
+						switch (code)
+						{
+						case 11:
+							event->control = INPUT_F1;
+							return true;
+						case 12:
+							event->control = INPUT_F2;
+							return true;
+						case 13:
+							event->control = INPUT_F3;
+							return true;
+						case 14:
+							event->control = INPUT_F4;
+							return true;
+						case 15:
+							event->control = INPUT_F5;
+							return true;
+						case 17:
+							event->control = INPUT_F6;
+							return true;
+						}
+					}
+				}
+			}
+
+			// Fallback for lone ESC
+			event->type	   = INPUT_EVENT_CONTROL;
+			event->control = INPUT_BACK;
+			return true;
+		}
+
 		event->type = INPUT_EVENT_KEY;
 
-		if (c > 0x1F && c < 0x7F) // ASCII printable range
+		if (c > 0x1F && c < 0x7F) // Printable ASCII
 		{
 			event->key = c;
 		}
@@ -46,18 +126,12 @@ bool hal_input_poll(hal_input_event_t *event)
 			event->type	   = INPUT_EVENT_CONTROL;
 			event->control = INPUT_ENTER;
 		}
-		else if (c == 0x1B) // Escape
-		{
-			event->type	   = INPUT_EVENT_CONTROL;
-			event->control = INPUT_BACK;
-		}
 		else
 		{
-			// Temporarily print a question mark for non-printable characters
 			event->key = '?';
 		}
 
-		hal_serial_write_char(c); // Echo back to serial
+		hal_serial_write_char(c); // Echo
 		return true;
 	}
 
