@@ -3,9 +3,10 @@
 #include "hal/hal_time.h"
 
 #include "core/types.h"
-#include "core/ui/text.h"
-#include "core/ui/plot.h"
 #include "core/ui/eqedit.h"
+#include "core/ui/plot.h"
+#include "core/ui/settings.h"
+#include "core/ui/text.h"
 
 #include <stdbool.h>
 #include <string.h>
@@ -40,6 +41,8 @@ static void render(void)
 	case MODE_EQLIST:
 		ui_eqedit_render();
 		break;
+	case MODE_SETTINGS:
+		ui_settings_render();
 	default:
 		break;
 	}
@@ -69,6 +72,12 @@ int main(void)
 					render();
 					continue;
 				}
+				else if (event.control == INPUT_F2)
+				{
+					mode = MODE_SETTINGS;
+					render();
+					continue;
+				}
 
 				bool handled = false;
 
@@ -86,6 +95,9 @@ int main(void)
 					break;
 				case MODE_EQLIST:
 					handled = ui_eqedit_handle_control(event.control, &mode);
+					break;
+				case MODE_SETTINGS:
+					handled = ui_settings_handle_control(event.control, &mode);
 					break;
 				default:
 					break;

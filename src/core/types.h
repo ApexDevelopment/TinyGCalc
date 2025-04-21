@@ -5,7 +5,8 @@ typedef enum {
     MODE_TEXT = 0,
     MODE_GRAPH,
     MODE_TABLE,
-	MODE_EQLIST
+	MODE_EQLIST,
+	MODE_SETTINGS
 } ui_mode_t;
 
 typedef enum {

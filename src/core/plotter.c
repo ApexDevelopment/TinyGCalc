@@ -1,5 +1,6 @@
 #include "plotter.h"
 #include "core/utils/graph.h"
+#include "core/utils/trig.h"
 #include "hal/hal_display.h"
 #include "tinyexpr.h"
 #include <math.h>
@@ -22,10 +23,19 @@ void plot_function(const char *expr, float x_min, float x_max, float y_min, floa
 	int height = hal_display_get_height();
 
 	double		x	   = 0.0;
-	te_variable vars[] = {{"x", &x}};
+	te_variable vars[] = {
+		{"x", &x},
+		{"sin", sin_override, TE_FUNCTION1},
+		{"cos", cos_override, TE_FUNCTION1},
+		{"tan", tan_override, TE_FUNCTION1},
+		{"asin", asin_override, TE_FUNCTION1},
+		{"acos", acos_override, TE_FUNCTION1},
+		{"atan", atan_override, TE_FUNCTION1},
+		{"atan2", atan2_override, TE_FUNCTION2},
+	};
 
 	int		 err;
-	te_expr *compiled = te_compile(expr, vars, 1, &err);
+	te_expr *compiled = te_compile(expr, vars, sizeof(vars) / sizeof(vars[0]), &err);
 	if (!compiled)
 	{
 		return;

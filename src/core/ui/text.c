@@ -1,6 +1,7 @@
 #include "tinyexpr.h"
 #include "core/repl.h"
 #include "core/ui/text.h"
+#include "core/utils/trig.h"
 #include "hal/hal_display.h"
 #include <math.h>
 #include <stdio.h>
@@ -38,9 +39,13 @@ bool ui_text_handle_control(input_event_t btn, ui_mode_t *mode_out)
 		if (expr_len == 0) return false;
 
 		int			err	   = 0;
-		double		x	   = 0;
-		te_variable vars[] = {{"x", &x}};
-		te_expr	   *expr   = te_compile(expr_buf, vars, 1, &err);
+		te_variable vars[] = {
+			{"sin", sin_override, TE_FUNCTION1},	 {"cos", cos_override, TE_FUNCTION1},
+			{"tan", tan_override, TE_FUNCTION1},	 {"asin", asin_override, TE_FUNCTION1},
+			{"acos", acos_override, TE_FUNCTION1},	 {"atan", atan_override, TE_FUNCTION1},
+			{"atan2", atan2_override, TE_FUNCTION2},
+		};
+		te_expr *expr = te_compile(expr_buf, vars, 1, &err);
 
 		char out_expr[REPL_LINE_MAX];
 		char out_result[REPL_LINE_MAX];

@@ -126,3 +126,8 @@ int hal_display_get_height(void) { return SCREEN_HEIGHT; }
 int hal_display_get_font_width(void) { return FONT6X8_WIDTH; }
 
 int hal_display_get_font_height(void) { return FONT6X8_HEIGHT; }
+
+void hal_display_set_rotation(display_rotation_t rotation)
+{
+	// No rotation in this mock implementation
+}

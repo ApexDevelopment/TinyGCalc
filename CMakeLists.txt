@@ -54,8 +54,10 @@ set(SRC_FILES
 	src/core/ui/eqedit.c
 	src/core/ui/plot.c
 	src/core/ui/text.c
+	src/core/ui/settings.c
 	src/core/utils/display.c
 	src/core/utils/graph.c
+	src/core/utils/trig.c
 	lib/tinyexpr/tinyexpr.c
 )
 
