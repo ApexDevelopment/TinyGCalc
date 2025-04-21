@@ -34,7 +34,7 @@ git clone --recursive https://github.com/ApexDevelopment/TinyGCalc.git
 cd TinyGCalc
 ```
 
-#### On Windows (with MinGW)
+#### On Windows (MinGW)
 ```cmd
 build.bat
 ```
@@ -44,7 +44,21 @@ build.bat
 ./build.sh
 ```
 
-> By default, both scripts build the `mock` (desktop SDL2) platform using your native compiler (e.g. MinGW or GCC). You can build for a specific platform with `build [platform]`. For example, `build picow` will build a UF2 for the Pi Pico W.
+By default, this builds the desktop `mock` platform using SDL2.
+
+To build for a different platform, use:
+```bash
+build [platform]
+```
+
+For example, to build a UF2 for the Raspberry Pi Pico W:
+```bash
+build picow
+```
+
+> Pitfall: if you target a Pico board but you don't have `picotool` installed, it will be built from source. This may cause CMake to choke. In that case you should either install picotool, or patch that `CMakeLists.txt` file to ask for a newer version of CMake.
+
+> For more information on dependencies and environment configuration, see [`BUILDING.md`](./BUILDING.md)
 
 ---
 
@@ -71,10 +85,6 @@ Or set it globally in your shell:
 ```bash
 export PICO_SDK_PATH=$HOME/pico-sdk
 ```
-
-> Pitfall: if you are building for a Pico board and you don't have `picotool` installed, it will be built from source.
-This can cause CMake to choke on `mbedtls`. In that case you should either install picotool, or patch that `CMakeLists.txt`
-file to ask for a newer version of CMake.
 
 ---
 
