@@ -22,14 +22,14 @@ display_rotation_t rotation_mode  = DISPLAY_ROTATE_0;
 static setting_entry_t settings[] = {{"Use Degrees", SETTING_BOOL, &angle_mode_deg},
 									 {"Screen Rotation", SETTING_ENUM, &rotation_mode}};
 
-static const int settings_count = sizeof(settings) / sizeof(settings[0]);
+static const int settings_count = 2;
 
 int ui_settings_cursor = 0;
 
 void ui_settings_render(void)
 {
 	hal_display_fill_screen(0x0000);
-	hal_display_draw_text(0, 0, "MODE SETTINGS", 0xFFFF);
+	hal_display_draw_text(0, 0, "SETTINGS", 0xFFFF);
 
 	for (int i = 0; i < settings_count; ++i)
 	{
@@ -42,7 +42,8 @@ void ui_settings_render(void)
 			snprintf(line, sizeof(line), "(%c) %s", *(bool *) s->value ? 'x' : ' ', s->label);
 			break;
 		case SETTING_ENUM:
-			snprintf(line, sizeof(line), "(%d) %s", *(int *) s->value, s->label);
+			int v = *(uint8_t *) s->value; // technically not a safe cast from enum but works fine in practice
+			snprintf(line, sizeof(line), "(%d) %s", v, s->label);
 			break;
 		}
 
@@ -57,12 +58,10 @@ bool ui_settings_handle_control(input_event_t control, ui_mode_t *mode_out)
 	{
 	case INPUT_UP:
 		if (ui_settings_cursor > 0) ui_settings_cursor--;
-		break;
-
+		return true;
 	case INPUT_DOWN:
-		if (ui_settings_cursor < 2) ui_settings_cursor++;
-		break;
-
+		if (ui_settings_cursor < settings_count - 1) ui_settings_cursor++;
+		return true;
 	case INPUT_ENTER:
 		switch (ui_settings_cursor)
 		{
@@ -77,13 +76,11 @@ bool ui_settings_handle_control(input_event_t control, ui_mode_t *mode_out)
 		default:
 			break;
 		}
-		break;
-
+		return true;
 	case INPUT_BACK:
 		*mode_out = MODE_TEXT;
-		break;
-
+		return true;
 	default:
-		break;
+		return false;
 	}
 }

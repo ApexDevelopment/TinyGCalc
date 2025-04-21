@@ -4,8 +4,8 @@
 #include "core/types.h"
 #include "hal/hal_input.h"
 
-void ui_graph_render(float x_min, float x_max, float y_min, float y_max);
-void ui_graph_zoom(float *min, float *max, float factor);
-bool ui_graph_handle_control(input_event_t btn, ui_mode_t *mode_out);
+void ui_plot_zoom(float *min, float *max, float factor);
+void ui_plot_render();
+bool ui_plot_handle_control(input_event_t btn, ui_mode_t *mode_out);
 
 #endif // PLOT_H

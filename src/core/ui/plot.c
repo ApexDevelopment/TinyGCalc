@@ -7,10 +7,49 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-bool ui_graph_handle_control(input_event_t btn, ui_mode_t *mode_out)
+static float x_min = -10.0f;
+static float x_max = 10.0f;
+static float y_min = -1.5f;
+static float y_max = 1.5f;
+
+void ui_plot_zoom(float *min, float *max, float factor)
+{
+	float		center	   = (*min + *max) / 2.0f;
+	float		half_range = (*max - *min) / 2.0f * factor;
+	const float min_range  = 0.0001f;
+	if (half_range < min_range) return;
+	*min = center - half_range;
+	*max = center + half_range;
+}
+
+bool ui_plot_handle_control(input_event_t btn, ui_mode_t *mode_out)
 {
 	switch (btn)
 	{
+	case INPUT_LEFT:
+		x_min -= 0.5f;
+		x_max -= 0.5f;
+		return true;
+	case INPUT_RIGHT:
+		x_min += 0.5f;
+		x_max += 0.5f;
+		return true;
+	case INPUT_UP:
+		y_min += 0.5f;
+		y_max += 0.5f;
+		return true;
+	case INPUT_DOWN:
+		y_min -= 0.5f;
+		y_max -= 0.5f;
+		return true;
+	case INPUT_SELECT:
+		ui_plot_zoom(&x_min, &x_max, 0.8f);
+		ui_plot_zoom(&y_min, &y_max, 0.8f);
+		return true;
+	case INPUT_BACK:
+		ui_plot_zoom(&x_min, &x_max, 1.25f);
+		ui_plot_zoom(&y_min, &y_max, 1.25f);
+		return true;
 	case INPUT_ENTER:
 	case INPUT_F1:
 		*mode_out = MODE_EQLIST;
@@ -21,17 +60,7 @@ bool ui_graph_handle_control(input_event_t btn, ui_mode_t *mode_out)
 	return false;
 }
 
-void ui_graph_zoom(float *min, float *max, float factor)
-{
-	float		center	   = (*min + *max) / 2.0f;
-	float		half_range = (*max - *min) / 2.0f * factor;
-	const float min_range  = 0.0001f;
-	if (half_range < min_range) return;
-	*min = center - half_range;
-	*max = center + half_range;
-}
-
-void ui_graph_render(float x_min, float x_max, float y_min, float y_max)
+void ui_plot_render()
 {
 	int width  = hal_display_get_width();
 	int height = hal_display_get_height();
