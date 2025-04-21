@@ -56,7 +56,7 @@ For example, to build a UF2 for the Raspberry Pi Pico W:
 build picow
 ```
 
-> Pitfall: if you target a Pico board but you don't have `picotool` installed, it will be built from source. This may cause CMake to choke. In that case you should either install picotool, or patch that `CMakeLists.txt` file to ask for a newer version of CMake.
+> Pitfall: if you target a Pico board but you don't have `picotool` installed, it will be built from source. This may cause CMake to choke.
 
 > For more information on dependencies and environment configuration, see [`BUILDING.md`](./BUILDING.md)
 
